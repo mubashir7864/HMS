@@ -86,77 +86,6 @@ def patient_registration(request):
 def register(request):
     return render(request, 'core/register.html')
 
-# User = get_user_model()  
-
-# def register(request):
-#     if request.method == 'POST':
-#         form = UserRegistrationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             role = form.cleaned_data.get('role')
-#             user.save()
-
-#             if role == 'doctor':
-#                 group, created = Group.objects.get_or_create(name='doctor')
-#                 user.groups.add(group)
-#                 Doctor.objects.create(user=user, name =user.username, email=user.email)
-#             elif role == 'patient':
-#                 group, _ = Group.objects.get_or_create(name='Patient')
-#                 user.groups.add(group)
-#                 Patient.objects.create(user=user, name=user.username, email=user.email)
-            
-#             messages.success(request, "Registration successful! Please log in.")
-#             return redirect('login')
-        
-#         else:
-#             messages.error(request,"Error Occured")
-#     else:
-#         form = UserRegistrationForm()
-#     return render(request, 'core/register.html',{"form":form})
-
-# def login(request):
-#     role = request.GET.get('role','guest')
-
-#     role_messages = {
-#         "doctor": ("Welcome Doctor", "Treating patients with ultimate care."),
-#         "patient": ("We Are Here to Take Care of You", "Your health is our priority."),
-#         "admin": ("Welcome Admin", "Managing the system efficiently."),
-#     }
-        
-        
-#     heading, slogan = role_messages.get(role, ("Welcome", "Please log in."))
-
-
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             return redirect('dashboard')
-#         else:
-#             messages.error(request, "Invalid credentials")
-#     else:
-#         form = LoginForm()
-    
-#     return render(request, 'core/login.html',{
-#         'form':form,
-#         'heading': heading,
-#         'slogan': slogan
-#     })
-        
-
-# def custom_login_view(request):
-#     role = request.GET.get('role', '')  # Get role from query parameter
-
-#     role_messages = {
-#         "doctor": ("Welcome Doctor", "Treating patients with ultimate care."),
-#         "patient": ("We Are Here to Take Care of You", "Your health is our priority."),
-#         "admin": ("Welcome Admin", "Managing the system efficiently."),
-#     }
-
-#     heading, slogan = role_messages.get(role, ("Welcome", "Please log in."))
-
-#     return LoginView.as_view(template_name='core/login.html', extra_context={"heading": heading, "slogan": slogan})(request)        
 
 def rolepage(request):
     return render(request, 'core/rolepage.html')
@@ -168,33 +97,33 @@ class CustomLoginView(LoginView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        role = self.request.GET.get('role', '')  # Get role from URL query
-        context['role'] = role  # Pass it to template
+        role = self.request.GET.get('role', '')  
+        context['role'] = role  
         return context
     
 
     def form_valid(self, form):
         user = form.get_user()
 
-        # ✅ Check if the user is a doctor and approved
+        
         if user.groups.filter(name='Doctor').exists():
             try:
                 doctor = Doctor.objects.get(user=user)
                 if not doctor.is_approved:
                     logout(self.request)
-                    return redirect(reverse_lazy('rolepage') + '?error=not_approved')  # Redirect back with error message
+                    return redirect(reverse_lazy('rolepage') + '?error=not_approved') 
             except Doctor.DoesNotExist:
-                pass  # Just in case there's no doctor entry
+                pass  
 
         return super().form_valid(form)
     
     def get_success_url(self):
         user = self.request.user
         if user.groups.filter(name='Doctor').exists():
-            return reverse_lazy('doctor_dashboard')  # Redirect to Doctor Dashboard
+            return reverse_lazy('doctor_dashboard')  
         elif user.groups.filter(name='Patient').exists():
             return reverse_lazy('patient_dashboard')
-        elif user.is_superuser:  # Check if the user is an admin
+        elif user.is_superuser:  
             return reverse_lazy('admin_dashboard') 
 
 
@@ -300,7 +229,7 @@ def doctor_dashboard(request):
 
 @login_required
 def doctor_appointments(request):
-    doctor = Doctor.objects.get(user=request.user)  # Assuming the logged-in user is a doctor
+    doctor = Doctor.objects.get(user=request.user)  
     date_filter = request.GET.get('date')
 
     if date_filter:
@@ -368,7 +297,7 @@ def medical_record(request, appointment_id):
 @login_required
 @user_passes_test(is_doctor)
 def doctor_medical_records(request):
-    doctor = get_object_or_404(Doctor, user=request.user)  # Ensure doctor exists
+    doctor = get_object_or_404(Doctor, user=request.user)  
     medical_records = MedicalRecord.objects.filter(doctor=doctor)
     
     return render(request, "core/doctors/medical_records.html", {"medical_records": medical_records})
@@ -378,11 +307,6 @@ def doctor_medical_records(request):
 @user_passes_test(is_doctor)
 def generate_bill(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
-    
-
-
-
-    # Check if a bill already exists
     bill, created = Billing.objects.get_or_create(
         appointment=appointment,
         defaults={
@@ -444,7 +368,7 @@ def approve_doctor(request, doctor_id):
 def reject_doctor(request, doctor_id):
 
     doctor = get_object_or_404(Doctor, id=doctor_id)
-    doctor.user.delete()  # Deletes the doctor and their user account
+    doctor.user.delete()  
     messages.warning(request, "Doctor has been rejected and removed.")
     return redirect('pending_doctors')
 
@@ -453,7 +377,7 @@ def reject_doctor(request, doctor_id):
 @login_required
 @staff_member_required
 def manage_doctors(request):
-    doctors = Doctor.objects.filter(is_approved=True)  # Get only approved doctors
+    doctors = Doctor.objects.filter(is_approved=True)  
     return render(request, 'core/admin/manage_doctors.html', {'doctors': doctors})
 
 
@@ -529,8 +453,6 @@ def reschedule_appointment(request, appointment_id):
         if form.is_valid():
             new_date = form.cleaned_data['appointmentdate']
             new_time = form.cleaned_data['slot']
-
-            # Check if the doctor is already booked at the new date & time
             conflict = Appointment.objects.filter(
                 doctor=appointment.doctor.id,
                 appointmentdate=new_date,

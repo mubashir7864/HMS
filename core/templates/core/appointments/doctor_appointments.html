@@ -1,0 +1,78 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="flex h-screen  bg-gray-100 w-full">
+    <!-- Sidebar -->
+    {% include "core/doctorsidebar.html" %}
+
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 p-6 w-full">
+            <div class="bg-white shadow-md p-6 rounded-lg max-w-4xl mx-auto">
+                <h1 class="text-2xl font-semibold text-gray-700">My Appointments</h1>
+                
+                <!-- Filter by Date -->
+                <form method="GET" class="mt-4 flex space-x-4">
+                    <input type="date" name="date" class="p-2 border rounded" value="{{ request.GET.date }}">
+                    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Filter</button>
+                    <a href="{% url 'doctor_appointments' %}" class="bg-gray-500 text-white p-2 rounded">View All</a>
+                </form>
+                
+
+                <!-- Appointments Table -->
+                <div class="overflow-x-auto mt-4">
+                    <table class="min-w-full bg-white border rounded-lg">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-700">
+                                <th class="p-3">Patient</th>
+                                <th class="p-3">Date</th>
+                                <th class="p-3">slot</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr class="border-t">
+                                <td class="p-3">{{ appointment.patient.user }}</td>
+                                <td class="p-3">{{ appointment.appointmentdate }}</td>
+                                <td class="p-3">{{ appointment.slot }}</td>
+                                <td class="p-3">{{ appointment.status }}</td>
+                                    {%if appointment.status == 'Scheduled' %}
+                                        <td class="p-3 space-x-2">
+                                            <a href="{% url 'attend_appointment' appointment.id %}" class="bg-green-500 text-white p-2 rounded">Attend</a>
+                                            <a href="{% url 'reschedule_doappointment' appointment.id %}" class="bg-yellow-500 text-white p-2 rounded">Reschedule</a>
+                                            <a href="{% url 'cancel_appointment' appointment.id %}" class="bg-red-500 text-white p-2 rounded" onclick="return confirm('Are you sure?');">Cancel</a>
+                                        </td>
+                                    {% elif appointment.status == 'Completed' %}
+                                        <td class="p-3 space-x-2">
+                                            <a class="bg-blue-500 text-white p-2 rounded">Completed</a>
+                                            {% if appointment.bill == False %}
+                                                <a href="{% url 'generate_bill' appointment.id %}" class="bg-blue-500 text-white p-2 rounded">
+                                                    Generate Bill
+                                                </a>
+                                            {% elif appointment.bill == True %}
+                                                <a class="bg-green-500 text-white p-2 rounded">
+                                                    Billed
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    {%elif appointment.status == 'Cancelled' %}
+                                        <td class="p-3 space-x-2">
+                                            <a class="bg-slate-600 text-white p-2 rounded">Cancelled</a>
+                                        </td>
+                                    {% endif %}
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="p-3 text-center text-gray-500">No appointments found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </main>
+</div>
+
+{% endblock content %}

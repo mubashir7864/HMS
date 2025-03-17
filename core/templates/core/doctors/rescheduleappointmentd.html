@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% block title %}<title>Reschedule Appointment</title>{% endblock title %}
+
+{% block content %}
+<div class="flex min-h-screen bg-gray-100 min-w-full">
+    {% include "core/doctorsidebar.html" %}
+
+    <main class="flex-1 p-6 min-w-full">
+        <div class="bg-white shadow-md p-6 rounded-lg max-w-lg mx-auto">
+            <h1 class="text-2xl font-semibold text-gray-700">Reschedule Appointment</h1>
+            <form method="POST" class="mt-4">
+                {% csrf_token %}
+                <label class="block text-gray-700">New Date</label>
+                <input type="date" name="new_date" class="p-2 border rounded w-full" required>
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded mt-4">Reschedule</button>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock content %}

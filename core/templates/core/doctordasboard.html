@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="flex h-screen  bg-gray-100 min-w-full">
+    <!-- Sidebar -->
+    {% include "core/doctorsidebar.html" %}
+
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 p-6">
+        <div class="bg-white shadow-md p-6 rounded-lg">
+            <h1 class="text-2xl font-semibold text-gray-700">Welcome Doctor,  {{ user.username }}</h1>
+            <p class="text-gray-600 mt-2">Here you can manage your appointments, view your medical history, and handle bills.</p>
+        </div>
+    </main>
+</div>
+{% comment %} <div class="flex h-screen">
+
+<div class="flex flex-col md:flex-row ">
+    <!-- Sidebar -->
+    <aside class="bg-blue-600 text-white w-full md:w-64 p-6 fixed md:relative h-full md:h-auto">
+        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+        <nav class="space-y-4">
+            <a href="{% url 'book_appoinment' %}" class="block px-4 py-2 bg-blue-700 rounded hover:bg-blue-800">Book Appointment</a>
+            <a href="#" class="block px-4 py-2 bg-blue-700 rounded hover:bg-blue-800">View Doctors</a>
+            <a href="#" class="block px-4 py-2 bg-blue-700 rounded hover:bg-blue-800">Medical History</a>
+            <a href="#"class="block px-4 py-2 bg-blue-700 rounded hover:bg-blue-800">View & Pay Bills</a>
+            <a href="#" class="block px-4 py-2 bg-red-500 rounded hover:bg-red-600">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 md:ml-64">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-2xl font-bold mb-4">Welcome, {{ user.username }}!</h2>
+            <p class="text-gray-600">Here you can manage your appointments, view your medical history, and pay bills.</p>
+        </div>
+    </main>
+{% comment %} </div>  {% endcomment %}
+{% endblock content %} 

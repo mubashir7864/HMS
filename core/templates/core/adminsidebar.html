@@ -1,0 +1,12 @@
+<aside class="bg-blue-600 text-white w-full md:w-64 p-6 fixed md:relative h-full md:h-auto">
+    <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
+    <nav class="space-y-4"> 
+        <a href="{% url 'pending_doctors' %}" class="block px-4 py-2 bg-blue-500 rounded hover:bg-gray-600">Pending Approvals</a>
+        <a href="{% url 'manage_doctors' %}" class="block px-4 py-2 bg-green-500 rounded hover:bg-gray-600">Manage Doctors</a>
+        <a href="{% url 'manage_patients' %}" class="block px-4 py-2 bg-purple-500 rounded hover:bg-gray-600">Manage Patients</a>
+        <a href="{% url 'admin_appointments' %}" class="block px-4 py-2 bg-yellow-500 rounded hover:bg-gray-600">Appointments</a>
+        <a href="{% url 'admin_billing' %}" class="block px-4 py-2 bg-orange-500 rounded hover:bg-gray-600">Billing</a>   
+        
+        <a href="{% url 'logout' %}" class="block px-4 py-2 bg-red-500 rounded hover:bg-red-600">Logout</a>
+    </nav>
+</aside>

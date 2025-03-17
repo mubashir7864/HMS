@@ -1,0 +1,33 @@
+{% extends "core/admindashboard.html" %}
+
+{% block admincontent %}
+<h2 class="text-2xl font-bold mb-4">Manage Doctors</h2>
+
+{% if doctors %}
+<table class="w-full border-collapse border border-gray-300">
+    <thead>
+        <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">ID</th>
+            <th class="border border-gray-300 px-4 py-2">Name</th>
+            <th class="border border-gray-300 px-4 py-2">Specialization</th>
+            <th class="border border-gray-300 px-4 py-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doctor in doctors %}
+        <tr class="border border-gray-300">
+            <td class="border border-gray-300 px-4 py-2">{{ doctor.id }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ doctor.user.username }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ doctor.specialization }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+                <a href="{% url 'delete_doctor' doctor.id %}" class="bg-red-500 text-white px-3 py-1 rounded" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-gray-600">No doctors found.</p>
+{% endif %}
+
+{% endblock admincontent %}

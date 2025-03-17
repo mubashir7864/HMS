@@ -1,0 +1,53 @@
+{% extends "core/admindashboard.html" %}
+
+{% block admincontent %}
+<h2 class="text-2xl font-bold mb-4">Manage Appointments</h2>
+
+<!-- Filters -->
+<form method="GET" class="mb-4">
+    <select name="status" class="border p-2">
+        <option value="">All Status</option>
+        <option value="Scheduled">Scheduled</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+    </select>
+    <input type="date" name="date" class="border p-2">
+    <button type="submit" class="bg-blue-500 text-white p-2">Filter</button>
+</form>
+
+<!-- Appointments Table -->
+<table class="w-full border-collapse border border-gray-300">
+    <thead>
+        <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">Patient</th>
+            <th class="border border-gray-300 px-4 py-2">Doctor</th>
+            <th class="border border-gray-300 px-4 py-2">Date</th>
+            <th class="border border-gray-300 px-4 py-2">Slot</th>
+            <th class="border border-gray-300 px-4 py-2">Status</th>
+            <th class="border border-gray-300 px-4 py-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+        <tr>
+            <td class="border px-4 py-2">{{ appointment.patient.user.username }}</td>
+            <td class="border px-4 py-2">{{ appointment.doctor.user.username }}</td>
+            <td class="border px-4 py-2">{{ appointment.appointmentdate }}</td>
+            <td class="border px-4 py-2">{{ appointment.slot }}</td>
+            <td class="border px-4 py-2">{{ appointment.status }}</td>
+            <td class="border px-4 py-2 space-x-2">
+                {% if appointment.status == 'Scheduled' %}
+                <a href="{% url 'admin_cancel_appointment' appointment.id %}" class="bg-red-500 text-white p-2 rounded">Cancel</a>
+                <a href="{% url 'admin_reschedule_appointment' appointment.id %}" class="bg-yellow-500 text-white p-2 rounded">Reschedule</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center text-gray-500">No appointments found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock admincontent %}

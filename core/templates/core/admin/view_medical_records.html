@@ -1,0 +1,36 @@
+{% extends "core/admindashboard.html" %}
+
+{% block admincontent %}
+<h2 class="text-2xl font-bold mb-4">Medical Records for {{ patient.user.username }}</h2>
+
+
+<a href="{% url 'manage_patients' %}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">
+    ← Back to Patient DashBoard
+</a>
+
+{% if medical_records %}
+<table class="w-full border-collapse border border-gray-300">
+    <thead>
+        <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">Visit Date</th>
+            <th class="border border-gray-300 px-4 py-2">Doctor</th>
+            <th class="border border-gray-300 px-4 py-2">Diagnosis</th>
+            <th class="border border-gray-300 px-4 py-2">Prescription</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in medical_records %}
+        <tr class="border border-gray-300">
+            <td class="border border-gray-300 px-4 py-2">{{ record.visit_date }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ record.doctor.user.username }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ record.diagnosis }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ record.prescription }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-gray-600">No medical records found.</p>
+{% endif %}
+
+{% endblock admincontent%}

@@ -1,0 +1,100 @@
+{% extends "core/base.html" %}
+{% block title %}<title>Book Appointment</title>{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen bg-gray-100 items-start">
+    {% include "core/patientsidebar.html" %}
+     <!-- Main Content -->
+     <main class="flex-1  p-6 ">
+        <div class="bg-white shadow-md p-6 rounded-lg max-w-4xl mx-auto">
+            <h1 class="text-2xl font-semibold text-gray-700">My Appointments</h1>
+            
+
+            <!-- Appointments Table -->
+            <div class="overflow-x-auto mt-4 max-h-fit">
+                <table class="min-w-full bg-white border rounded-lg">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700">
+                            <th class="p-3">Date</th>
+                            <th class="p-3">Doctor</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Slot</th>
+                            <th class="p-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr class="border-t">
+                            <td class="p-3">{{ appointment.appointmentdate }}</td>
+                            <td class="p-3">{{ appointment.doctor }}</td>
+                            <td class="p-3">{{ appointment.status }}</td>
+                            <td class="p-3">{{ appointment.slot }}</td>
+                            <td class="p-3 space-x-2">
+                                <a href="{% url 'reschedule_appointment' appointment.id %}" class="bg-yellow-500 text-white p-2 rounded">Reschedule</a>
+                                <a href="{% url 'delete_appointment' appointment.id %}" class="bg-red-500 text-white p-2 rounded" onclick="return confirm('Are you sure?');">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="p-3 text-center text-gray-500">No appointments found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</div>
+{% endblock content %}
+
+    {% comment %} <!-- Main Content -->
+    <main class="flex-1 ml-0 p-6">
+       
+        <div class=" bg-white p-8 rounded-xl shadow-lg">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">My Appointments</h2>
+            <div class="rounded-lg border-x-2 border-slate-200 p-5 max-h-max overflow-scroll ">
+              
+                <table class=" table-auto  border-collapse">
+                    <thead class="bg-secondary text-black text-center">
+                      <tr>
+                        <th class="px-6 py-3 text-left text-md font-medium">Doctor</th>
+                        <th class="px-6 py-3 text-left text-md font-medium">Date</th>
+                        <th class="px-6 py-3 text-left text-md font-medium">slot</th>
+                        <th class="px-6 py-3 text-left text-md font-medium">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     
+                      <tr class="border-b hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">doctor</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">Date</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">slot</td>
+                        <form action="" method="post">
+                        <td class="px-6 py-4 text-sm flex justify-start gap-4">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete-user" value="{{ eachuser.id }}">
+                                <button class="text-red-600 hover:text-white border border-red-600 hover:bg-red-600 px-4 py-2 rounded-md transition duration-300" value="{{eachuser.id}}" name="user-id" >Delete</button>
+                            </form>                                                 
+                          <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="ban-user" value="{{ eachuser.id }}">
+                          <button class="text-yellow-600 hover:text-white border border-yellow-600 hover:bg-yellow-600 px-4 py-2 rounded-md transition duration-300"  value="{{eachuser.id}}" name="user-id">Reshcedule</button>
+                         </form>  
+                        </td>
+
+                      </tr>
+                      
+                      
+                      
+                    </tbody>
+                  </table>
+                
+           
+
+            </div>
+        
+    </main>
+</div>
+{% endblock %} {% endcomment %}

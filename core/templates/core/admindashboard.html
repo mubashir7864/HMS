@@ -1,0 +1,58 @@
+{% extends "core/base.html" %}
+{% block title %}<title>Admin Dashboard</title>{% endblock %}
+
+{% block content %}
+
+<div class="flex h-screen  bg-gray-100 min-w-full">
+    <!-- Sidebar -->
+    {% include "core/adminsidebar.html" %}
+
+    
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 p-6">
+        <div class="bg-white p-6 rounded-lg shadow">
+            {% block admincontent %}
+            
+
+            <h2 class="text-2xl font-bold mb-4">Welcome Admin</h2>
+            <div class="bg-white shadow-md p-6 rounded-lg">
+                <h1 class="text-2xl font-semibold text-gray-700">{{ user.username }}</h1>
+                <p class="text-gray-600 mt-2">Here you can manage Everything.</p>
+            </div>
+
+        
+            {% endblock admincontent %}
+        </div>
+    </main>
+
+</div>
+{% comment %} <div class="p-6 min-w-full flex flex-col justify-start align-top"> {% endcomment %}
+    
+
+    <!-- Pending Doctor Approvals -->
+    {% comment %} <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Pending Doctor Approvals</h2>
+        <table class="w-full border-collapse border">
+            <tr class="bg-gray-200">
+                <th class="border p-2">Doctor Name</th>
+                <th class="border p-2">Specialization</th>
+                <th class="border p-2">Action</th>
+            </tr>
+            {% for doctor in unapproved_doctors %}
+            <tr>
+                <td class="border p-2">{{ doctor.user.first_name }} {{ doctor.user.last_name }}</td>
+                <td class="border p-2">{{ doctor.specialization }}</td>
+                <td class="border p-2">
+                    <a href="{% url 'approve_doctor' doctor.id %}" class="bg-green-500 text-white p-2 rounded">Approve</a>
+                    <a href="{% url 'delete_doctor' doctor.id %}" class="bg-red-500 text-white p-2 rounded" onclick="return confirm('Are you sure?');">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center p-2">No pending approvals</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div> {% endcomment %}
+{% comment %} </div> {% endcomment %}
+{% endblock %}

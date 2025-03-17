@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white shadow p-6 rounded-lg">
+    <h2 class="text-xl font-semibold mb-4">Billing Details</h2>
+    <p><strong>Patient:</strong> {{ bill.patient.user }}</p>
+    <p><strong>Appointment Date:</strong> {{ bill.appointment.appointmentdate }}</p>
+    <p><strong>Total Amount:</strong> ${{ bill.total_amount }}</p>
+    <p><strong>Status:</strong> {{ bill.payment_status }}</p>
+    {% if bill.payment_status == "Pending" %}
+    <a href="#" class="bg-green-500 text-white p-2 rounded">Pay Now</a> <!-- Future Payment Option -->
+    {% endif %}
+</div>
+{% endblock %}

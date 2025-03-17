@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-200 flex items-center justify-center h-screen">
+   
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-96">
+        
+        <!-- Role-based Welcome Message -->
+        <p class="text-3xl font-bold text-center mb-3">
+            {% if role == "doctor" %}
+                <span class="text-blue-600">Welcome Doctor</span>
+            {% elif role == "patient" %}
+                <span class="text-green-600">Take Care Your Health With us</span>
+            {% elif role == "admin" %}
+                <span class="text-red-600">Welcome Admin</span>
+            {% else %}
+                <span class="text-gray-800">Welcome</span>
+            {% endif %}
+        </p>
+
+        <!-- Decorative Divider -->
+        <div class="relative w-3/4 mx-auto">
+            <hr class="border-t-2 border-gray-300">
+        </div>
+
+        <!-- Login Heading -->
+        <h2 class="text-2xl font-semibold mb-6 text-center text-gray-800">Login</h2>
+
+        <!-- Login Form -->
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-gray-700 font-medium">Username</label>
+                <input type="text" name="username" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Enter your username" required>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Enter your password" required>
+            </div>
+            {% if request.GET.error == 'not_approved' %}
+                <p class="text-red-500">Your account is not approved by the admin yet.</p>
+            {% endif %}
+            <!-- Error Messages -->
+            {% if form.errors %}
+            <div class="bg-red-100 text-red-700 p-3 rounded-md border border-red-300">
+                <p class="font-semibold">There were errors in your submission:</p>
+                <ul class="list-disc list-inside">
+                    {% for field, errors in form.errors.items %}
+                        <li>{{ field|title }}: {{ errors|join:", " }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Login Button -->
+            <button class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all shadow-md">
+                Login
+            </button>
+        </form>
+
+        <!-- Register Link -->
+        <p class="mt-4 text-center text-gray-600">
+            Don't have an account? 
+            <a href="{% url 'register' %}" class="text-blue-500 hover:text-blue-700 font-semibold">Register here</a>
+        </p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "core/admindashboard.html" %}
+
+{% block admincontent %}
+<h2 class="text-2xl font-bold mb-4">Manage Patients</h2>
+
+{% if patients %}
+<table class="w-full border-collapse border border-gray-300">
+    <thead>
+        <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">ID</th>
+            <th class="border border-gray-300 px-4 py-2">Name</th>
+            <th class="border border-gray-300 px-4 py-2">Total Visits</th>
+            <th class="border border-gray-300 px-4 py-2">Scheduled</th>
+            <th class="border border-gray-300 px-4 py-2">Cancelled</th>
+            <th class="border border-gray-300 px-4 py-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for patient in patients %}
+        <tr class="border border-gray-300">
+            <td class="border border-gray-300 px-4 py-2">{{ patient.id }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ patient.user.username }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ patient.visit_count }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ patient.appointmentsScheduled }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ patient.appointmentsCancelled }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+                <a href="{% url 'view_medical_records' patient.id %}" class="bg-blue-500 text-white px-3 py-1 rounded">View Records</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-gray-600">No patients found.</p>
+{% endif %}
+
+{% endblock admincontent %}

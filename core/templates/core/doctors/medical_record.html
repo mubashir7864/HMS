@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+{% block title %}<title>Medical Record</title>{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen bg-gray-100 w-full">
+    {% include "core/doctorsidebar.html" %}
+
+    <main class="flex-1 p-6">
+        <div class="bg-white shadow-md p-6 rounded-lg max-w-2xl mx-auto">
+            <h1 class="text-2xl font-semibold text-gray-700">Medical Record for {{ appointment.patient.user.username }}</h1>
+            <div>
+                <h2>Appointment_Id : {{appointment.id}}</h2>
+            </div>
+            <form method="POST" class="mt-4">
+                {% csrf_token %}
+                <div class="space-y-4">
+                    <label class="block">
+                        <span class="text-gray-700">Diagnosis</span>
+                        {{ form.diagnosis }}
+                    </label>
+
+                    <label class="block">
+                        <span class="text-gray-700">Prescription</span>
+                        {{ form.prescription }}
+                    </label>
+
+                    {% comment %} <label class="block">
+                        <span class="text-gray-700">Additional Notes</span>
+                        {{ form.notes }}
+                    </label> {% endcomment %}
+                </div>
+
+                <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded">Save Record</button>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}
